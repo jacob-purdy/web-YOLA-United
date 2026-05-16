@@ -204,4 +204,54 @@ Queremos invitar a nuestra comunidad a apoyar a los maestros de YOLA (Teaching A
     }
   }
 }
-</style></template></aside><div id="dialog-portal-:r0:"><div><div class="fixed left-0 right-0 top-0 hidden bottom-0" style="z-index: 100;"><div id="dialog-backdrop-:r0:" class="bg-[#0000007F] fixed bottom-0 left-0 right-0 top-0 flex items-end md:items-center md:justify-center [-webkit-tap-highlight-color:transparent] animate-[fade-in_0.2s]" role="button" tabindex="0" aria-label="Close dialog"></div></div></div></div><next-route-announcer><p aria-live="assertive" id="__next-route-announcer__" role="alert" style="border: 0px; clip: rect(0px, 0px, 0px, 0px); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; top: 0px; width: 1px; white-space: nowrap; overflow-wrap: normal;"></p></next-route-announcer></body></html>
+</style></template></aside><div id="dialog-portal-:r0:"><div><div class="fixed left-0 right-0 top-0 hidden bottom-0" style="z-index: 100;"><div id="dialog-backdrop-:r0:" class="bg-[#0000007F] fixed bottom-0 left-0 right-0 top-0 flex items-end md:items-center md:justify-center [-webkit-tap-highlight-color:transparent] animate-[fade-in_0.2s]" role="button" tabindex="0" aria-label="Close dialog"></div></div></div></div><next-route-announcer><p aria-live="assertive" id="__next-route-announcer__" role="alert" style="border: 0px; clip: rect(0px, 0px, 0px, 0px); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; top: 0px; width: 1px; white-space: nowrap; overflow-wrap: normal;"></p></next-route-announcer>
+<script>
+(function () {
+  var popover = document.createElement('div');
+  popover.style.cssText = 'position:fixed;display:none;background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.18);padding:4px;z-index:9999;min-width:130px;';
+
+  var copyBtn = document.createElement('button');
+  copyBtn.style.cssText = 'display:flex;align-items:center;gap:8px;padding:9px 14px;border:none;background:none;cursor:pointer;border-radius:7px;font-size:14px;font-family:inherit;white-space:nowrap;width:100%;color:#111;';
+  copyBtn.addEventListener('mouseenter', function () { copyBtn.style.background = '#f3f4f6'; });
+  copyBtn.addEventListener('mouseleave', function () { copyBtn.style.background = 'none'; });
+  copyBtn.innerHTML = '<svg style="flex-shrink:0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>Copy link</span>';
+
+  popover.appendChild(copyBtn);
+  document.body.appendChild(popover);
+
+  var currentUrl = '';
+
+  document.querySelectorAll('[data-testid="NewLinkShareButton"]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var container = btn.closest('[data-testid="NewLinkContainer"]');
+      var link = container ? container.querySelector('a[href]') : null;
+      if (!link) return;
+      currentUrl = link.href;
+
+      var rect = btn.getBoundingClientRect();
+      popover.style.display = 'block';
+      var left = rect.right - popover.offsetWidth;
+      var top = rect.bottom + 6;
+      if (top + 50 > window.innerHeight) top = rect.top - 50;
+      popover.style.left = Math.max(8, left) + 'px';
+      popover.style.top = top + 'px';
+    });
+  });
+
+  copyBtn.addEventListener('click', function () {
+    navigator.clipboard.writeText(currentUrl).then(function () {
+      copyBtn.querySelector('span').textContent = 'Copied!';
+      setTimeout(function () {
+        copyBtn.querySelector('span').textContent = 'Copy link';
+        popover.style.display = 'none';
+      }, 1500);
+    });
+  });
+
+  document.addEventListener('click', function () {
+    popover.style.display = 'none';
+  });
+})();
+</script>
+</body></html>
